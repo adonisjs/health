@@ -78,11 +78,16 @@
       "html"
     ],
     "exclude": [
-      "tests/**"
+      "tests/**",
+      "bin/**",
+      "tsnode.esm.js"
     ]
   },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/package"
   },
-  "prettier": "@adonisjs/prettier-config"
+  "prettier": "@adonisjs/prettier-config",
+  "dependencies": {
+    "check-disk-space": "^3.4.0"
+  }
 }
