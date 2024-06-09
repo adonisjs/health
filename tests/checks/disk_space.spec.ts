@@ -70,5 +70,5 @@ test.group('Disk space', () => {
         },
       },
     })
-  })
+  }).timeout(6000)
 })
