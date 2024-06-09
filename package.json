@@ -30,7 +30,8 @@
     "postbuild": "npm run copy:templates",
     "release": "np",
     "version": "npm run build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "sync-labels": "github-label-sync --labels .github/labels.json adonisjs/health"
   },
   "keywords": [
     "health",
@@ -51,6 +52,7 @@
     "copyfiles": "^2.4.1",
     "del-cli": "^5.1.0",
     "eslint": "^8.57.0",
+    "github-label-sync": "^2.3.1",
     "np": "^10.0.5",
     "prettier": "^3.3.0",
     "ts-node": "^10.9.2",
