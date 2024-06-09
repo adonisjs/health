@@ -26,7 +26,7 @@ export class DiskSpaceHealthCheck extends BaseCheck {
   }
 
   name: string = 'Disk space check'
-  diskPath = process.platform === 'win32' ? 'C://' : '/'
+  diskPath = process.platform === 'win32' ? 'C:\\' : '/'
 
   /**
    * Define the percentage threshold after which a
