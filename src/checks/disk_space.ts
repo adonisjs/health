@@ -17,7 +17,7 @@ import type { HealthCheckResult } from '../types.js'
  * Checks for the disk space and report warning and errors after a
  * certain threshold is exceeded.
  */
-export class DiskSpaceCheck extends BaseCheck {
+export class DiskSpaceHealthCheck extends BaseCheck {
   #warnThreshold: number = 60
   #failThreshold: number = 80
   #computeFn: () => Promise<{ free: number; size: number }> = () => {

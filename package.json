@@ -1,21 +1,20 @@
 {
   "name": "@adonisjs/health",
-  "description": "",
+  "description": "The health checks module for AdonisJS",
   "version": "0.0.0",
-  "engines": {
-    "node": ">=20.6.0"
-  },
   "type": "module",
   "files": [
-    "build/src",
-    "build/providers",
-    "build/stubs",
-    "build/index.d.ts",
-    "build/index.js"
+    "build",
+    "!build/bin",
+    "!build/tests"
   ],
+  "main": "build/index.js",
   "exports": {
     ".": "./build/index.js",
     "./types": "./build/src/types.js"
+  },
+  "engines": {
+    "node": ">=20.6.0"
   },
   "scripts": {
     "clean": "del-cli build",
@@ -27,7 +26,7 @@
     "pretest": "npm run lint",
     "test": "c8 npm run quick:test",
     "prebuild": "npm run lint && npm run clean",
-    "build": "tsc",
+    "build": "tsup-node && tsc --emitDeclarationOnly --declaration",
     "postbuild": "npm run copy:templates",
     "release": "np",
     "version": "npm run build",
@@ -55,8 +54,21 @@
     "np": "^10.0.5",
     "prettier": "^3.3.0",
     "ts-node": "^10.9.2",
+    "tsup": "^8.1.0",
     "typescript": "^5.4.5"
   },
+  "dependencies": {
+    "@poppinss/utils": "^6.7.3",
+    "check-disk-space": "^3.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adonisjs/health.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adonisjs/health/issues"
+  },
+  "homepage": "https://github.com/adonisjs/health#readme",
   "publishConfig": {
     "access": "public",
     "tag": "latest"
@@ -82,8 +94,16 @@
     "extends": "@adonisjs/eslint-config/package"
   },
   "prettier": "@adonisjs/prettier-config",
-  "dependencies": {
-    "@poppinss/utils": "^6.7.3",
-    "check-disk-space": "^3.4.0"
+  "tsup": {
+    "entry": [
+      "./index.ts",
+      "./src/types.ts"
+    ],
+    "outDir": "./build",
+    "clean": true,
+    "format": "esm",
+    "dts": false,
+    "sourcemap": true,
+    "target": "esnext"
   }
 }
