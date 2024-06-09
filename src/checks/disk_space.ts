@@ -25,7 +25,7 @@ export class DiskSpaceCheck extends BaseCheck {
     return checkDiskSpace(this.diskPath)
   }
 
-  name: string = 'disk_space_check'
+  name: string = 'Disk space check'
   diskPath = process.platform === 'win32' ? 'C://' : '/'
 
   /**
@@ -60,7 +60,9 @@ export class DiskSpaceCheck extends BaseCheck {
     const usedPercentage = ((size - free) / size) * 100
 
     if (usedPercentage >= this.#failThreshold) {
-      return Result.failed('Disk usage exceeded the set threshold').mergeMetaData({
+      return Result.failed(
+        `Disk usage exceeded the "${this.#failThreshold}%" threshold`
+      ).mergeMetaData({
         percentages: {
           used: usedPercentage,
           threshold: this.#failThreshold,
@@ -69,7 +71,9 @@ export class DiskSpaceCheck extends BaseCheck {
     }
 
     if (usedPercentage >= this.#warnThreshold) {
-      return Result.warning('Disk usage exceeded the set threshold').mergeMetaData({
+      return Result.warning(
+        `Disk usage exceeded the "${this.#warnThreshold}%" threshold`
+      ).mergeMetaData({
         percentages: {
           used: usedPercentage,
           threshold: this.#warnThreshold,
@@ -77,7 +81,7 @@ export class DiskSpaceCheck extends BaseCheck {
       })
     }
 
-    return Result.ok('Disk usage is under the defined thresholds').mergeMetaData({
+    return Result.ok('Disk usage is under defined thresholds').mergeMetaData({
       percentages: {
         used: usedPercentage,
       },

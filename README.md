@@ -2,10 +2,7 @@
 
 The list of checks we need
 
-- Event loop monitoring (need to figure out right technique)
-- Disk space monitoring
-- Memory monitoring
-- CPU load (if possible)
-- DB connection + Connections count
-- Redis connection + Used memory
-- Ping
+- [x] Disk space monitoring
+- [ ] Memory monitoring
+- [ ] DB connection + Connections count (via Lucid)
+- [ ] Redis connection + Used memory (via Redis)

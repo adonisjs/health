@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import stringHelpers from '@adonisjs/core/helpers/string'
+import stringHelpers from '@poppinss/utils/string'
 import type { HealthCheckContract, HealthCheckResult } from './types.js'
 
 /**
