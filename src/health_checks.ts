@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+import debug from './debug.js'
 import { HealthCheckContract, HealthCheckReport, HealthCheckResult } from './types.js'
 
 /**
@@ -39,6 +40,7 @@ export class HealthChecks {
        * Return cached result when cache is fresh
        */
       if (cachedResult && Date.now() < cachedResult.finishedAt.getTime() + cacheMilliseconds) {
+        debug('returning cached results for "%s" check', check.name, cachedResult)
         return {
           name: check.name,
           isCached: true,
@@ -50,6 +52,7 @@ export class HealthChecks {
        * Run check and cache result
        */
       const result = await check.run()
+      debug('executed "%s" check', check.name, result)
       this.#cachedResults.set(check.name, result)
 
       return {
@@ -63,6 +66,7 @@ export class HealthChecks {
      * Execute the check without caching it.
      */
     const result = await check.run()
+    debug('executed "%s" check', check.name, result)
     return {
       name: check.name,
       isCached: false,
