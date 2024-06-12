@@ -27,6 +27,19 @@ export class HealthChecks {
   #cachedResults: Map<string, HealthCheckResult> = new Map()
 
   /**
+   * Returns the debugging info of the process
+   */
+  #getDebugInfo(): HealthCheckReport['debugInfo'] {
+    return {
+      pid: process.pid,
+      ppid: process.ppid,
+      platform: process.platform,
+      uptime: process.uptime(),
+      version: process.version,
+    }
+  }
+
+  /**
    * Executes the check and respects the caching layer as well
    */
   async #runCheck(
@@ -118,6 +131,7 @@ export class HealthChecks {
       isHealthy,
       status,
       finishedAt,
+      debugInfo: this.#getDebugInfo(),
       checks,
     }
   }

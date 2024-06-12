@@ -30,6 +30,13 @@ test.group('Health checks', () => {
       isHealthy: true,
       status: 'ok',
       finishedAt: expect.any(Date),
+      debugInfo: {
+        pid: expect.any(Number),
+        ppid: expect.any(Number),
+        platform: process.platform,
+        uptime: expect.any(Number),
+        version: process.version,
+      },
       checks: [
         {
           name: 'fake',
@@ -77,6 +84,13 @@ test.group('Health checks', () => {
       isHealthy: false,
       status: 'error',
       finishedAt: expect.any(Date),
+      debugInfo: {
+        pid: expect.any(Number),
+        ppid: expect.any(Number),
+        platform: process.platform,
+        uptime: expect.any(Number),
+        version: process.version,
+      },
       checks: [
         {
           name: 'passing',
@@ -127,6 +141,13 @@ test.group('Health checks', () => {
       isHealthy: true,
       status: 'warning',
       finishedAt: expect.any(Date),
+      debugInfo: {
+        pid: expect.any(Number),
+        ppid: expect.any(Number),
+        platform: process.platform,
+        uptime: expect.any(Number),
+        version: process.version,
+      },
       checks: [
         {
           name: 'passing',
@@ -161,6 +182,13 @@ test.group('Health checks', () => {
       isHealthy: true,
       status: 'ok',
       finishedAt: expect.any(Date),
+      debugInfo: {
+        pid: expect.any(Number),
+        ppid: expect.any(Number),
+        platform: process.platform,
+        uptime: expect.any(Number),
+        version: process.version,
+      },
       checks: [
         {
           name: 'fake',
@@ -176,6 +204,13 @@ test.group('Health checks', () => {
       isHealthy: true,
       status: 'ok',
       finishedAt: expect.any(Date),
+      debugInfo: {
+        pid: expect.any(Number),
+        ppid: expect.any(Number),
+        platform: process.platform,
+        uptime: expect.any(Number),
+        version: process.version,
+      },
       checks: [
         {
           name: 'fake',
@@ -203,6 +238,13 @@ test.group('Health checks', () => {
       isHealthy: true,
       status: 'ok',
       finishedAt: expect.any(Date),
+      debugInfo: {
+        pid: expect.any(Number),
+        ppid: expect.any(Number),
+        platform: process.platform,
+        uptime: expect.any(Number),
+        version: process.version,
+      },
       checks: [
         {
           name: 'simple_fake_check',
@@ -247,6 +289,13 @@ test.group('Health checks', () => {
       isHealthy: false,
       status: 'error',
       finishedAt: expect.any(Date),
+      debugInfo: {
+        pid: expect.any(Number),
+        ppid: expect.any(Number),
+        platform: process.platform,
+        uptime: expect.any(Number),
+        version: process.version,
+      },
       checks: [
         {
           name: 'failing',

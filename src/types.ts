@@ -56,6 +56,37 @@ export type HealthCheckReport = {
   finishedAt: Date
 
   /**
+   * The debugging info for the running process
+   */
+  debugInfo: {
+    /**
+     * The process id
+     */
+    pid: number
+
+    /**
+     * The process id for the parent process (if any)
+     */
+    ppid?: number
+
+    /**
+     * The number of seconds for which the process has been
+     * running.
+     */
+    uptime: number
+
+    /**
+     * Node.js version
+     */
+    version: string
+
+    /**
+     * The platform on which the application is running
+     */
+    platform: string
+  }
+
+  /**
    * Perform checks and their report
    */
   checks: ({ isCached: boolean; name: string } & HealthCheckResult)[]
