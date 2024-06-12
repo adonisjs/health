@@ -18,7 +18,7 @@ import type { HealthCheckResult } from '../types.js'
  * certain threshold is exceeded.
  */
 export class DiskSpaceHealthCheck extends BaseCheck {
-  #warnThreshold: number = 60
+  #warnThreshold: number = 75
   #failThreshold: number = 80
   #computeFn: () => Promise<{ free: number; size: number }> = () => {
     // @ts-expect-error "Broken typings"
