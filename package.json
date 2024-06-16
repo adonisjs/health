@@ -1,7 +1,7 @@
 {
   "name": "@adonisjs/health",
   "description": "The health checks module for AdonisJS",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "type": "module",
   "files": [
     "build",
