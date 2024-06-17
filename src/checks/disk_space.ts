@@ -57,34 +57,27 @@ export class DiskSpaceHealthCheck extends BaseCheck {
 
   async run(): Promise<HealthCheckResult> {
     const { free, size } = await this.#computeFn()
-    const usedPercentage = ((size - free) / size) * 100
+    const usedPercentage = Math.floor(((size - free) / size) * 100)
+    const metaData = {
+      sizeInPercentage: {
+        used: usedPercentage,
+        failureThreshold: this.#failThreshold,
+        warningThreshold: this.#warnThreshold,
+      },
+    }
 
     if (usedPercentage >= this.#failThreshold) {
       return Result.failed(
-        `Disk usage exceeded the "${this.#failThreshold}%" threshold`
-      ).mergeMetaData({
-        percentages: {
-          used: usedPercentage,
-          threshold: this.#failThreshold,
-        },
-      })
+        `Disk usage is ${usedPercentage}%, which is above the threshold of ${this.#failThreshold}%`
+      ).mergeMetaData(metaData)
     }
 
     if (usedPercentage >= this.#warnThreshold) {
       return Result.warning(
-        `Disk usage exceeded the "${this.#warnThreshold}%" threshold`
-      ).mergeMetaData({
-        percentages: {
-          used: usedPercentage,
-          threshold: this.#warnThreshold,
-        },
-      })
+        `Disk usage is ${usedPercentage}%, which is above the threshold of ${this.#warnThreshold}%`
+      ).mergeMetaData(metaData)
     }
 
-    return Result.ok('Disk usage is under defined thresholds').mergeMetaData({
-      percentages: {
-        used: usedPercentage,
-      },
-    })
+    return Result.ok('Disk usage is under defined thresholds').mergeMetaData(metaData)
   }
 }

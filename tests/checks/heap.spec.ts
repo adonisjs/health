@@ -8,7 +8,6 @@
  */
 
 import { test } from '@japa/runner'
-import string from '@poppinss/utils/string'
 import { MemoryHeapHealthCheck } from '../../src/checks/heap.js'
 
 test.group('Memory Heap', () => {
@@ -18,10 +17,11 @@ test.group('Memory Heap', () => {
     expect(await heapHealthCheck.run()).toEqual({
       status: 'error',
       finishedAt: expect.any(Date),
-      message: 'Heap usage exceeded the "1MB" threshold',
+      message: expect.any(String),
       meta: {
-        bytes: {
-          threshold: string.bytes.parse('1mb'),
+        memoryInBytes: {
+          failureThreshold: 1048576,
+          warningThreshold: 262144000,
           used: expect.any(Number),
         },
       },
@@ -36,10 +36,11 @@ test.group('Memory Heap', () => {
     expect(await heapHealthCheck.run()).toEqual({
       status: 'warning',
       finishedAt: expect.any(Date),
-      message: 'Heap usage exceeded the "1MB" threshold',
+      message: expect.any(String),
       meta: {
-        bytes: {
-          threshold: string.bytes.parse('1mb'),
+        memoryInBytes: {
+          failureThreshold: 314572800,
+          warningThreshold: 1048576,
           used: expect.any(Number),
         },
       },
@@ -54,7 +55,9 @@ test.group('Memory Heap', () => {
       finishedAt: expect.any(Date),
       message: 'Heap usage is under defined thresholds',
       meta: {
-        bytes: {
+        memoryInBytes: {
+          failureThreshold: 314572800,
+          warningThreshold: 262144000,
           used: expect.any(Number),
         },
       },

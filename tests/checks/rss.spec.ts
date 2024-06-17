@@ -8,7 +8,6 @@
  */
 
 import { test } from '@japa/runner'
-import string from '@poppinss/utils/string'
 import { MemoryRSSHealthCheck } from '../../src/checks/rss.js'
 
 test.group('Memory RSS', () => {
@@ -18,10 +17,11 @@ test.group('Memory RSS', () => {
     expect(await rssHealthCheck.run()).toEqual({
       status: 'error',
       finishedAt: expect.any(Date),
-      message: 'RSS usage exceeded the "1MB" threshold',
+      message: expect.any(String),
       meta: {
-        bytes: {
-          threshold: string.bytes.parse('1mb'),
+        memoryInBytes: {
+          failureThreshold: 1048576,
+          warningThreshold: 335544320,
           used: expect.any(Number),
         },
       },
@@ -34,10 +34,11 @@ test.group('Memory RSS', () => {
     expect(await rssHealthCheck.run()).toEqual({
       status: 'warning',
       finishedAt: expect.any(Date),
-      message: 'RSS usage exceeded the "1MB" threshold',
+      message: expect.any(String),
       meta: {
-        bytes: {
-          threshold: string.bytes.parse('1mb'),
+        memoryInBytes: {
+          failureThreshold: 367001600,
+          warningThreshold: 1048576,
           used: expect.any(Number),
         },
       },
@@ -52,7 +53,9 @@ test.group('Memory RSS', () => {
       finishedAt: expect.any(Date),
       message: 'RSS usage is under defined thresholds',
       meta: {
-        bytes: {
+        memoryInBytes: {
+          failureThreshold: 367001600,
+          warningThreshold: 335544320,
           used: expect.any(Number),
         },
       },

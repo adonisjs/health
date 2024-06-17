@@ -69,33 +69,26 @@ export class MemoryHeapHealthCheck extends BaseCheck {
 
   async run(): Promise<HealthCheckResult> {
     const { heapUsed } = this.#computeFn()
+    const metaData = {
+      memoryInBytes: {
+        used: heapUsed,
+        failureThreshold: this.#failThreshold,
+        warningThreshold: this.#warnThreshold,
+      },
+    }
 
     if (heapUsed > this.#failThreshold) {
       return Result.failed(
-        `Heap usage exceeded the "${stringHelpers.bytes.format(this.#failThreshold)}" threshold`
-      ).mergeMetaData({
-        bytes: {
-          used: heapUsed,
-          threshold: this.#failThreshold,
-        },
-      })
+        `Heap usage is ${stringHelpers.bytes.format(heapUsed)}, which is above the threshold of ${stringHelpers.bytes.format(this.#failThreshold)}`
+      ).mergeMetaData(metaData)
     }
 
     if (heapUsed > this.#warnThreshold) {
       return Result.warning(
-        `Heap usage exceeded the "${stringHelpers.bytes.format(this.#warnThreshold)}" threshold`
-      ).mergeMetaData({
-        bytes: {
-          used: heapUsed,
-          threshold: this.#warnThreshold,
-        },
-      })
+        `Heap usage is ${stringHelpers.bytes.format(heapUsed)}, which is above the threshold of ${stringHelpers.bytes.format(this.#warnThreshold)}`
+      ).mergeMetaData(metaData)
     }
 
-    return Result.ok('Heap usage is under defined thresholds').mergeMetaData({
-      bytes: {
-        used: heapUsed,
-      },
-    })
+    return Result.ok('Heap usage is under defined thresholds').mergeMetaData(metaData)
   }
 }

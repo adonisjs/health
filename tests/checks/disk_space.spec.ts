@@ -23,10 +23,11 @@ test.group('Disk space', () => {
     expect(await diskSpaceCheck.run()).toEqual({
       status: 'error',
       finishedAt: expect.any(Date),
-      message: 'Disk usage exceeded the "80%" threshold',
+      message: 'Disk usage is 90%, which is above the threshold of 80%',
       meta: {
-        percentages: {
-          threshold: 80,
+        sizeInPercentage: {
+          failureThreshold: 80,
+          warningThreshold: 75,
           used: 90,
         },
       },
@@ -47,10 +48,11 @@ test.group('Disk space', () => {
     expect(await diskSpaceCheck.run()).toEqual({
       status: 'warning',
       finishedAt: expect.any(Date),
-      message: 'Disk usage exceeded the "60%" threshold',
+      message: 'Disk usage is 70%, which is above the threshold of 60%',
       meta: {
-        percentages: {
-          threshold: 60,
+        sizeInPercentage: {
+          failureThreshold: 80,
+          warningThreshold: 60,
           used: 70,
         },
       },
@@ -65,7 +67,9 @@ test.group('Disk space', () => {
       finishedAt: expect.any(Date),
       message: 'Disk usage is under defined thresholds',
       meta: {
-        percentages: {
+        sizeInPercentage: {
+          failureThreshold: 99,
+          warningThreshold: 90,
           used: expect.any(Number),
         },
       },

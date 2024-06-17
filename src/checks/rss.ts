@@ -69,33 +69,26 @@ export class MemoryRSSHealthCheck extends BaseCheck {
 
   async run(): Promise<HealthCheckResult> {
     const { rss } = this.#computeFn()
+    const metaData = {
+      memoryInBytes: {
+        used: rss,
+        failureThreshold: this.#failThreshold,
+        warningThreshold: this.#warnThreshold,
+      },
+    }
 
     if (rss > this.#failThreshold) {
       return Result.failed(
-        `RSS usage exceeded the "${stringHelpers.bytes.format(this.#failThreshold)}" threshold`
-      ).mergeMetaData({
-        bytes: {
-          used: rss,
-          threshold: this.#failThreshold,
-        },
-      })
+        `RSS usage is ${stringHelpers.bytes.format(rss)}, which is above the threshold of ${stringHelpers.bytes.format(this.#failThreshold)}`
+      ).mergeMetaData(metaData)
     }
 
     if (rss > this.#warnThreshold) {
       return Result.warning(
-        `RSS usage exceeded the "${stringHelpers.bytes.format(this.#warnThreshold)}" threshold`
-      ).mergeMetaData({
-        bytes: {
-          used: rss,
-          threshold: this.#warnThreshold,
-        },
-      })
+        `RSS usage is ${stringHelpers.bytes.format(rss)}, which is above the threshold of ${stringHelpers.bytes.format(this.#warnThreshold)}`
+      ).mergeMetaData(metaData)
     }
 
-    return Result.ok('RSS usage is under defined thresholds').mergeMetaData({
-      bytes: {
-        used: rss,
-      },
-    })
+    return Result.ok('RSS usage is under defined thresholds').mergeMetaData(metaData)
   }
 }
