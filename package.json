@@ -2,19 +2,19 @@
   "name": "@adonisjs/health",
   "description": "The health checks module for AdonisJS",
   "version": "1.2.0",
+  "engines": {
+    "node": ">=20.6.0"
+  },
+  "main": "build/index.js",
   "type": "module",
   "files": [
     "build",
     "!build/bin",
     "!build/tests"
   ],
-  "main": "build/index.js",
   "exports": {
     ".": "./build/index.js",
     "./types": "./build/src/types.js"
-  },
-  "engines": {
-    "node": ">=20.6.0"
   },
   "scripts": {
     "clean": "del-cli build",
@@ -33,12 +33,6 @@
     "prepublishOnly": "npm run build",
     "sync-labels": "github-label-sync --labels .github/labels.json adonisjs/health"
   },
-  "keywords": [
-    "health",
-    "adonisjs"
-  ],
-  "author": "virk,adonisjs",
-  "license": "MIT",
   "devDependencies": {
     "@adonisjs/eslint-config": "^1.3.0",
     "@adonisjs/prettier-config": "^1.3.0",
@@ -63,6 +57,9 @@
     "@poppinss/utils": "^6.7.3",
     "check-disk-space": "^3.4.0"
   },
+  "author": "virk,adonisjs",
+  "license": "MIT",
+  "homepage": "https://github.com/adonisjs/health#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adonisjs/health.git"
@@ -70,7 +67,14 @@
   "bugs": {
     "url": "https://github.com/adonisjs/health/issues"
   },
-  "homepage": "https://github.com/adonisjs/health#readme",
+  "keywords": [
+    "health",
+    "adonisjs"
+  ],
+  "eslintConfig": {
+    "extends": "@adonisjs/eslint-config/package"
+  },
+  "prettier": "@adonisjs/prettier-config",
   "publishConfig": {
     "access": "public",
     "tag": "latest"
@@ -92,10 +96,6 @@
       "tsnode.esm.js"
     ]
   },
-  "eslintConfig": {
-    "extends": "@adonisjs/eslint-config/package"
-  },
-  "prettier": "@adonisjs/prettier-config",
   "tsup": {
     "entry": [
       "./index.ts",
