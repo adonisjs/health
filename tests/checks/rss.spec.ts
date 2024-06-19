@@ -8,11 +8,11 @@
  */
 
 import { test } from '@japa/runner'
-import { MemoryRSSHealthCheck } from '../../src/checks/rss.js'
+import { MemoryRSSCheck } from '../../src/checks/rss_check.js'
 
 test.group('Memory RSS', () => {
   test('report error when RSS exceeds the define error threshold', async ({ expect }) => {
-    const rssHealthCheck = new MemoryRSSHealthCheck().failWhenExceeds('1mb')
+    const rssHealthCheck = new MemoryRSSCheck().failWhenExceeds('1mb')
 
     expect(await rssHealthCheck.run()).toEqual({
       status: 'error',
@@ -29,7 +29,7 @@ test.group('Memory RSS', () => {
   })
 
   test('report warning when RSS exceeds the defined warning threshold', async ({ expect }) => {
-    const rssHealthCheck = new MemoryRSSHealthCheck().warnWhenExceeds('1mb')
+    const rssHealthCheck = new MemoryRSSCheck().warnWhenExceeds('1mb')
 
     expect(await rssHealthCheck.run()).toEqual({
       status: 'warning',
@@ -46,7 +46,7 @@ test.group('Memory RSS', () => {
   })
 
   test('prepare ok result when RSS usage is under defined thresholds', async ({ expect }) => {
-    const rssHealthCheck = new MemoryRSSHealthCheck()
+    const rssHealthCheck = new MemoryRSSCheck()
 
     expect(await rssHealthCheck.run()).toEqual({
       status: 'ok',

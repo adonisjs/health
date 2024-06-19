@@ -8,11 +8,11 @@
  */
 
 import { test } from '@japa/runner'
-import { DiskSpaceHealthCheck } from '../../src/checks/disk_space.js'
+import { DiskSpaceCheck } from '../../src/checks/disk_space_check.js'
 
 test.group('Disk space', () => {
   test('report error when disk space exceeds the defined error threshold', async ({ expect }) => {
-    const diskSpaceCheck = new DiskSpaceHealthCheck().failWhenExceeds(80)
+    const diskSpaceCheck = new DiskSpaceCheck().failWhenExceeds(80)
     diskSpaceCheck.compute(async () => {
       return {
         free: 1,
@@ -37,7 +37,7 @@ test.group('Disk space', () => {
   test('report warning when disk space exceeds the defined warning threshold', async ({
     expect,
   }) => {
-    const diskSpaceCheck = new DiskSpaceHealthCheck().warnWhenExceeds(60)
+    const diskSpaceCheck = new DiskSpaceCheck().warnWhenExceeds(60)
     diskSpaceCheck.compute(async () => {
       return {
         free: 3,
@@ -60,7 +60,7 @@ test.group('Disk space', () => {
   })
 
   test('compute actual disk space and prepare result', async ({ expect }) => {
-    const diskSpaceCheck = new DiskSpaceHealthCheck().warnWhenExceeds(90).failWhenExceeds(99)
+    const diskSpaceCheck = new DiskSpaceCheck().warnWhenExceeds(90).failWhenExceeds(99)
 
     expect(await diskSpaceCheck.run()).toEqual({
       status: 'ok',

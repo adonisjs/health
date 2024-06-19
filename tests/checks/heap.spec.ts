@@ -8,11 +8,11 @@
  */
 
 import { test } from '@japa/runner'
-import { MemoryHeapHealthCheck } from '../../src/checks/heap.js'
+import { MemoryHeapCheck } from '../../src/checks/heap_check.js'
 
 test.group('Memory Heap', () => {
   test('report error when heap usage exceeds the define error threshold', async ({ expect }) => {
-    const heapHealthCheck = new MemoryHeapHealthCheck().failWhenExceeds('1mb')
+    const heapHealthCheck = new MemoryHeapCheck().failWhenExceeds('1mb')
 
     expect(await heapHealthCheck.run()).toEqual({
       status: 'error',
@@ -31,7 +31,7 @@ test.group('Memory Heap', () => {
   test('report warning when heap usage exceeds the defined warning threshold', async ({
     expect,
   }) => {
-    const heapHealthCheck = new MemoryHeapHealthCheck().warnWhenExceeds('1mb')
+    const heapHealthCheck = new MemoryHeapCheck().warnWhenExceeds('1mb')
 
     expect(await heapHealthCheck.run()).toEqual({
       status: 'warning',
@@ -48,7 +48,7 @@ test.group('Memory Heap', () => {
   })
 
   test('prepare ok result when heap usage is under defined thresholds', async ({ expect }) => {
-    const heapHealthCheck = new MemoryHeapHealthCheck()
+    const heapHealthCheck = new MemoryHeapCheck()
 
     expect(await heapHealthCheck.run()).toEqual({
       status: 'ok',
