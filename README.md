@@ -10,7 +10,7 @@ AdonisJS health package is integrated within the core of AdonisJS and provides c
 
 ## Official Documentation
 
-The documentation is available on the [AdonisJS website](https://docs.adonisjs.com/guides/health-checks)
+The documentation is available on the [AdonisJS website](https://docs.adonisjs.com/guides/digging-deeper/health-checks)
 
 ## Contributing
 
