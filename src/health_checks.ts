@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 
-import debug from './debug.js'
+import debug from './debug.ts'
 import {
   type HealthCheckContract,
   type HealthCheckReport,
   type HealthCheckResult,
-} from './types.js'
+} from './types.ts'
 
 /**
  * The HealthChecks acts as a repository and a runner to register/execute

@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import type { HealthCheckResult } from './types.js'
+import type { HealthCheckResult } from './types.ts'
 
 /**
  * The result class offers a chainable API to create

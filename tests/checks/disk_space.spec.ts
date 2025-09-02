@@ -8,7 +8,7 @@
  */
 
 import { test } from '@japa/runner'
-import { DiskSpaceCheck } from '../../src/checks/disk_space_check.js'
+import { DiskSpaceCheck } from '../../src/checks/disk_space_check.ts'
 
 test.group('Disk space', () => {
   test('report error when disk space exceeds the defined error threshold', async ({ expect }) => {

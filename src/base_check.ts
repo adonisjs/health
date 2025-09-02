@@ -8,7 +8,7 @@
  */
 
 import stringHelpers from '@poppinss/utils/string'
-import type { HealthCheckContract, HealthCheckResult } from './types.js'
+import type { HealthCheckContract, HealthCheckResult } from './types.ts'
 
 /**
  * BaseCheck with shared affordances to define a custom health

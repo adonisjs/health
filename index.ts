@@ -7,9 +7,9 @@
  * file that was distributed with this source code.
  */
 
-export { Result } from './src/result.js'
-export { BaseCheck } from './src/base_check.js'
-export { HealthChecks } from './src/health_checks.js'
-export { MemoryRSSCheck } from './src/checks/rss_check.js'
-export { MemoryHeapCheck } from './src/checks/heap_check.js'
-export { DiskSpaceCheck } from './src/checks/disk_space_check.js'
+export { Result } from './src/result.ts'
+export { BaseCheck } from './src/base_check.ts'
+export { HealthChecks } from './src/health_checks.ts'
+export { MemoryRSSCheck } from './src/checks/rss_check.ts'
+export { MemoryHeapCheck } from './src/checks/heap_check.ts'
+export { DiskSpaceCheck } from './src/checks/disk_space_check.ts'

@@ -1,5 +1,5 @@
 import { test } from '@japa/runner'
-import { Result } from '../src/result.js'
+import { Result } from '../src/result.ts'
 
 test.group('Result', () => {
   test('create ok result', ({ expect }) => {

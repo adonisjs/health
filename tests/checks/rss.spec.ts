@@ -8,7 +8,7 @@
  */
 
 import { test } from '@japa/runner'
-import { MemoryRSSCheck } from '../../src/checks/rss_check.js'
+import { MemoryRSSCheck } from '../../src/checks/rss_check.ts'
 
 test.group('Memory RSS', () => {
   test('report error when RSS exceeds the define error threshold', async ({ expect }) => {

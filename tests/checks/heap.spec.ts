@@ -8,7 +8,7 @@
  */
 
 import { test } from '@japa/runner'
-import { MemoryHeapCheck } from '../../src/checks/heap_check.js'
+import { MemoryHeapCheck } from '../../src/checks/heap_check.ts'
 
 test.group('Memory Heap', () => {
   test('report error when heap usage exceeds the define error threshold', async ({ expect }) => {

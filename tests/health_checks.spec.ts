@@ -9,10 +9,10 @@
 
 import { test } from '@japa/runner'
 
-import { Result } from '../src/result.js'
-import { BaseCheck } from '../src/base_check.js'
-import { HealthChecks } from '../src/health_checks.js'
-import type { HealthCheckResult } from '../src/types.js'
+import { Result } from '../src/result.ts'
+import { BaseCheck } from '../src/base_check.ts'
+import { HealthChecks } from '../src/health_checks.ts'
+import type { HealthCheckResult } from '../src/types.ts'
 
 test.group('Health checks', () => {
   test('run custom health checks', async ({ expect }) => {

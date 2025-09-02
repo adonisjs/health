@@ -9,9 +9,9 @@
 
 import stringHelpers from '@poppinss/utils/string'
 
-import { Result } from '../result.js'
-import { BaseCheck } from '../base_check.js'
-import type { HealthCheckResult } from '../types.js'
+import { Result } from '../result.ts'
+import { BaseCheck } from '../base_check.ts'
+import type { HealthCheckResult } from '../types.ts'
 
 /**
  * Checks for the memory RSS size and report warning or error after a

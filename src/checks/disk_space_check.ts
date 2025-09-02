@@ -9,9 +9,9 @@
 
 import checkDiskSpace from 'check-disk-space'
 
-import { Result } from '../result.js'
-import { BaseCheck } from '../base_check.js'
-import type { HealthCheckResult } from '../types.js'
+import { Result } from '../result.ts'
+import { BaseCheck } from '../base_check.ts'
+import type { HealthCheckResult } from '../types.ts'
 
 /**
  * Checks for the disk space and report warning or error after a
