@@ -8,7 +8,11 @@
  */
 
 import debug from './debug.js'
-import { HealthCheckContract, HealthCheckReport, HealthCheckResult } from './types.js'
+import {
+  type HealthCheckContract,
+  type HealthCheckReport,
+  type HealthCheckResult,
+} from './types.js'
 
 /**
  * The HealthChecks acts as a repository and a runner to register/execute

@@ -18,8 +18,9 @@ import type { HealthCheckResult } from '../types.js'
  * certain threshold is exceeded.
  */
 export class MemoryHeapCheck extends BaseCheck {
-  #warnThreshold: number = stringHelpers.bytes.parse('250 mb')
-  #failThreshold: number = stringHelpers.bytes.parse('300 mb')
+  #warnThreshold: number = stringHelpers.bytes.parse('250 mb')!
+  #failThreshold: number = stringHelpers.bytes.parse('300 mb')!
+
   #computeFn: () => NodeJS.MemoryUsage = () => {
     return process.memoryUsage()
   }
@@ -38,7 +39,7 @@ export class MemoryHeapCheck extends BaseCheck {
    * ```
    */
   warnWhenExceeds(value: string | number) {
-    this.#warnThreshold = stringHelpers.bytes.parse(value)
+    this.#warnThreshold = stringHelpers.bytes.parse(value)!
     return this
   }
 
@@ -54,7 +55,7 @@ export class MemoryHeapCheck extends BaseCheck {
    * ```
    */
   failWhenExceeds(value: string | number) {
-    this.#failThreshold = stringHelpers.bytes.parse(value)
+    this.#failThreshold = stringHelpers.bytes.parse(value)!
     return this
   }
 
