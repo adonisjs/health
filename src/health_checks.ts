@@ -8,6 +8,7 @@
  */
 
 import debug from './debug.ts'
+import { healthCheck } from './tracing_channels.ts'
 import {
   type HealthCheckContract,
   type HealthCheckReport,
@@ -83,7 +84,11 @@ export class HealthChecks {
       /**
        * Run check and cache result
        */
-      const result = await check.run()
+      const result = await healthCheck.tracePromise(
+        check.run,
+        healthCheck.hasSubscribers ? { check } : undefined,
+        check
+      )
       debug('executed "%s" check', check.name, result)
       this.#cachedResults.set(check.name, result)
 
@@ -97,7 +102,11 @@ export class HealthChecks {
     /**
      * Execute the check without caching it.
      */
-    const result = await check.run()
+    const result = await healthCheck.tracePromise(
+      check.run,
+      healthCheck.hasSubscribers ? { check } : undefined,
+      check
+    )
     debug('executed "%s" check', check.name, result)
     return {
       name: check.name,

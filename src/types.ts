@@ -188,3 +188,10 @@ export interface HealthCheckContract {
    */
   run(): Promise<HealthCheckResult>
 }
+
+/**
+ * Tracing data shared with the health check channel subscribers
+ */
+export type HealthCheckTracingData = {
+  check: HealthCheckContract
+}

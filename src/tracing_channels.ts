@@ -1,0 +1,19 @@
+/*
+ * @adonisjs/http-server
+ *
+ * (c) AdonisJS
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+import diagnostics_channel from 'node:diagnostics_channel'
+import { HealthCheckTracingData } from './types.ts'
+
+/**
+ * Traces health check calls
+ */
+export const healthCheck = diagnostics_channel.tracingChannel<
+  'adonisjs.health.check',
+  HealthCheckTracingData
+>('adonisjs.health.check')
