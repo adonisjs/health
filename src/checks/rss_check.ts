@@ -16,14 +16,40 @@ import type { HealthCheckResult } from '../types.ts'
 /**
  * Checks for the memory RSS size and report warning or error after a
  * certain threshold is exceeded.
+ *
+ * @example
+ * ```typescript
+ * const rssCheck = new MemoryRSSCheck()
+ *   .as('RSS memory usage check')
+ *   .warnWhenExceeds('300 mb')
+ *   .failWhenExceeds('400 mb')
+ *   .cacheFor('1 minute')
+ *
+ * const result = await rssCheck.run()
+ * console.log(result.status) // 'ok' | 'warning' | 'error'
+ * ```
  */
 export class MemoryRSSCheck extends BaseCheck {
+  /**
+   * The warning threshold for RSS memory usage in bytes
+   */
   #warnThreshold: number = stringHelpers.bytes.parse('320 mb')!
+
+  /**
+   * The failure threshold for RSS memory usage in bytes
+   */
   #failThreshold: number = stringHelpers.bytes.parse('350 mb')!
+
+  /**
+   * Function to compute memory usage information
+   */
   #computeFn: () => NodeJS.MemoryUsage = () => {
     return process.memoryUsage()
   }
 
+  /**
+   * The name of the memory RSS check
+   */
   name: string = 'Memory RSS check'
 
   /**
@@ -36,6 +62,8 @@ export class MemoryRSSCheck extends BaseCheck {
    * ```
    * .warnWhenExceeds('200 mb')
    * ```
+   *
+   * @param value The threshold value as bytes (number) or string expression
    */
   warnWhenExceeds(value: string | number) {
     this.#warnThreshold = stringHelpers.bytes.parse(value)!
@@ -52,6 +80,8 @@ export class MemoryRSSCheck extends BaseCheck {
    * ```
    * .failWhenExceeds('500 mb')
    * ```
+   *
+   * @param value The threshold value as bytes (number) or string expression
    */
   failWhenExceeds(value: string | number) {
     this.#failThreshold = stringHelpers.bytes.parse(value)!
@@ -61,12 +91,27 @@ export class MemoryRSSCheck extends BaseCheck {
   /**
    * Define a custom callback to compute the RSS size. Defaults to
    * using "process.memoryUsage()" method call
+   *
+   * @param callback Function that returns memory usage information
+   *
+   * @example
+   * ```typescript
+   * const rssCheck = new MemoryRSSCheck()
+   *   .compute(() => {
+   *     // Custom RSS computation logic
+   *     const usage = process.memoryUsage()
+   *     return { ...usage, rss: usage.rss * 0.9 } // Custom adjustment
+   *   })
+   * ```
    */
   compute(callback: () => NodeJS.MemoryUsage): this {
     this.#computeFn = callback
     return this
   }
 
+  /**
+   * Executes the RSS memory usage check
+   */
   async run(): Promise<HealthCheckResult> {
     const { rss } = this.#computeFn()
     const metaData = {

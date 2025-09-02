@@ -3,10 +3,7 @@
   "name": "@adonisjs/health",
   "includeVersion": true,
   "excludeExternals": true,
-  "entryPoints": [
-    "./index.ts",
-    "./src/types.ts"
-  ],
+  "entryPoints": ["./index.ts", "./src/types.ts"],
   "excludePrivate": true,
   "excludeProtected": true,
   "excludeInternal": true,

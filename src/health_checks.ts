@@ -17,6 +17,19 @@ import {
 /**
  * The HealthChecks acts as a repository and a runner to register/execute
  * health checks.
+ *
+ * @example
+ * ```typescript
+ * const healthChecks = new HealthChecks()
+ *
+ * healthChecks.register([
+ *   new DiskSpaceCheck().warnWhenExceeds(70).failWhenExceeds(85),
+ *   new MemoryHeapCheck().warnWhenExceeds('200 mb').failWhenExceeds('500 mb')
+ * ])
+ *
+ * const report = await healthChecks.run()
+ * console.log(report.isHealthy) // true or false
+ * ```
  */
 export class HealthChecks {
   /**
@@ -45,6 +58,8 @@ export class HealthChecks {
 
   /**
    * Executes the check and respects the caching layer as well
+   *
+   * @param check The health check to execute
    */
   async #runCheck(
     check: HealthCheckContract
@@ -94,6 +109,17 @@ export class HealthChecks {
   /**
    * Register health checks. Existing health checks will be
    * removed during the register method call
+   *
+   * @param checks Array of health checks to register
+   *
+   * @example
+   * ```typescript
+   * const healthChecks = new HealthChecks()
+   * healthChecks.register([
+   *   new DiskSpaceCheck(),
+   *   new MemoryHeapCheck()
+   * ])
+   * ```
    */
   register(checks: HealthCheckContract[]) {
     this.#checks = checks
@@ -102,6 +128,15 @@ export class HealthChecks {
 
   /**
    * Append new set of health checks
+   *
+   * @param checks Array of health checks to append
+   *
+   * @example
+   * ```typescript
+   * const healthChecks = new HealthChecks()
+   * healthChecks.register([new DiskSpaceCheck()])
+   * healthChecks.append([new MemoryHeapCheck()]) // Adds to existing checks
+   * ```
    */
   append(checks: HealthCheckContract[]) {
     this.#checks = this.#checks.concat(checks)
@@ -111,6 +146,16 @@ export class HealthChecks {
   /**
    * Executes all the checks in parallel and returns the
    * health check report
+   *
+   * @example
+   * ```typescript
+   * const healthChecks = new HealthChecks()
+   * const report = await healthChecks.run()
+   *
+   * console.log(report.isHealthy) // true or false
+   * console.log(report.status) // 'ok' | 'warning' | 'error'
+   * console.log(report.checks) // Array of check results
+   * ```
    */
   async run(): Promise<HealthCheckReport> {
     let isHealthy: boolean = true

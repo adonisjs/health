@@ -16,15 +16,40 @@ import type { HealthCheckResult } from '../types.ts'
 /**
  * Checks for the memory heap size and report warning or error after a
  * certain threshold is exceeded.
+ *
+ * @example
+ * ```typescript
+ * const heapCheck = new MemoryHeapCheck()
+ *   .as('Heap memory usage check')
+ *   .warnWhenExceeds('200 mb')
+ *   .failWhenExceeds('300 mb')
+ *   .cacheFor('30s')
+ *
+ * const result = await heapCheck.run()
+ * console.log(result.status) // 'ok' | 'warning' | 'error'
+ * ```
  */
 export class MemoryHeapCheck extends BaseCheck {
+  /**
+   * The warning threshold for heap memory usage in bytes
+   */
   #warnThreshold: number = stringHelpers.bytes.parse('250 mb')!
+
+  /**
+   * The failure threshold for heap memory usage in bytes
+   */
   #failThreshold: number = stringHelpers.bytes.parse('300 mb')!
 
+  /**
+   * Function to compute memory usage information
+   */
   #computeFn: () => NodeJS.MemoryUsage = () => {
     return process.memoryUsage()
   }
 
+  /**
+   * The name of the memory heap check
+   */
   name: string = 'Memory heap check'
 
   /**
@@ -37,6 +62,8 @@ export class MemoryHeapCheck extends BaseCheck {
    * ```
    * .warnWhenExceeds('200 mb')
    * ```
+   *
+   * @param value The threshold value as bytes (number) or string expression
    */
   warnWhenExceeds(value: string | number) {
     this.#warnThreshold = stringHelpers.bytes.parse(value)!
@@ -53,6 +80,8 @@ export class MemoryHeapCheck extends BaseCheck {
    * ```
    * .failWhenExceeds('500 mb')
    * ```
+   *
+   * @param value The threshold value as bytes (number) or string expression
    */
   failWhenExceeds(value: string | number) {
     this.#failThreshold = stringHelpers.bytes.parse(value)!
@@ -62,12 +91,27 @@ export class MemoryHeapCheck extends BaseCheck {
   /**
    * Define a custom callback to compute the heap size. Defaults to
    * using "process.memoryUsage()" method call
+   *
+   * @param callback Function that returns memory usage information
+   *
+   * @example
+   * ```typescript
+   * const heapCheck = new MemoryHeapCheck()
+   *   .compute(() => {
+   *     // Custom memory computation logic
+   *     const usage = process.memoryUsage()
+   *     return { ...usage, heapUsed: usage.heapUsed * 0.8 } // Custom adjustment
+   *   })
+   * ```
    */
   compute(callback: () => NodeJS.MemoryUsage): this {
     this.#computeFn = callback
     return this
   }
 
+  /**
+   * Executes the heap memory usage check
+   */
   async run(): Promise<HealthCheckResult> {
     const { heapUsed } = this.#computeFn()
     const metaData = {

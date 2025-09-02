@@ -16,21 +16,53 @@ import type { HealthCheckResult } from '../types.ts'
 /**
  * Checks for the disk space and report warning or error after a
  * certain threshold is exceeded.
+ *
+ * @example
+ * ```typescript
+ * const diskCheck = new DiskSpaceCheck()
+ *   .as('Root disk space check')
+ *   .warnWhenExceeds(70)  // Warning at 70%
+ *   .failWhenExceeds(85)  // Error at 85%
+ *   .cacheFor('1 minute')
+ *
+ * const result = await diskCheck.run()
+ * console.log(result.status) // 'ok' | 'warning' | 'error'
+ * ```
  */
 export class DiskSpaceCheck extends BaseCheck {
+  /**
+   * The warning threshold percentage for disk usage
+   */
   #warnThreshold: number = 75
+
+  /**
+   * The failure threshold percentage for disk usage
+   */
   #failThreshold: number = 80
+
+  /**
+   * Function to compute disk space information
+   */
   #computeFn: () => Promise<{ free: number; size: number }> = () => {
     // @ts-expect-error "Broken typings"
     return checkDiskSpace(this.diskPath)
   }
 
+  /**
+   * The name of the disk space check
+   */
   name: string = 'Disk space check'
+
+  /**
+   * The disk path to check for space usage
+   */
   diskPath = process.platform === 'win32' ? 'C:\\' : '/'
 
   /**
    * Define the percentage threshold after which a
    * warning should be created
+   *
+   * @param valueInPercentage The percentage threshold for warnings
    */
   warnWhenExceeds(valueInPercentage: number) {
     this.#warnThreshold = valueInPercentage
@@ -40,6 +72,8 @@ export class DiskSpaceCheck extends BaseCheck {
   /**
    * Define the percentage threshold after which an
    * error should be created
+   *
+   * @param valueInPercentage The percentage threshold for errors
    */
   failWhenExceeds(valueInPercentage: number) {
     this.#failThreshold = valueInPercentage
@@ -49,12 +83,26 @@ export class DiskSpaceCheck extends BaseCheck {
   /**
    * Define a custom callback to compute the disk space. Defaults to
    * using "check-disk-space" package
+   *
+   * @param callback Function that returns disk space information
+   *
+   * @example
+   * ```typescript
+   * const diskCheck = new DiskSpaceCheck()
+   *   .compute(async () => {
+   *     // Custom disk space computation
+   *     return { free: 1000000000, size: 5000000000 } // 1GB free, 5GB total
+   *   })
+   * ```
    */
   compute(callback: () => Promise<{ free: number; size: number }>): this {
     this.#computeFn = callback
     return this
   }
 
+  /**
+   * Executes the disk space usage check
+   */
   async run(): Promise<HealthCheckResult> {
     const { free, size } = await this.#computeFn()
     const usedPercentage = Math.floor(((size - free) / size) * 100)
