@@ -8,7 +8,7 @@
  */
 
 import diagnostics_channel from 'node:diagnostics_channel'
-import { HealthCheckTracingData } from './types.ts'
+import { type HealthCheckTracingData } from './types.ts'
 
 /**
  * Traces health check calls
