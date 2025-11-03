@@ -7,22 +7,22 @@
  * file that was distributed with this source code.
  */
 
-import stringHelpers from '@poppinss/utils/string'
-
+import v8 from 'node:v8'
 import { Result } from '../result.ts'
 import { BaseCheck } from '../base_check.ts'
 import type { HealthCheckResult } from '../types.ts'
 
 /**
  * Checks for the memory heap size and report warning or error after a
- * certain threshold is exceeded.
+ * certain threshold is exceeded. Thresholds are defined as percentages
+ * of the maximum V8 heap size limit for the Node.js process.
  *
  * @example
  * ```typescript
  * const heapCheck = new MemoryHeapCheck()
  *   .as('Heap memory usage check')
- *   .warnWhenExceeds('200 mb')
- *   .failWhenExceeds('300 mb')
+ *   .warnWhenExceeds(80) // Warning at 80% of max heap
+ *   .failWhenExceeds(90) // Error at 90% of max heap
  *   .cacheFor('30s')
  *
  * const result = await heapCheck.run()
@@ -31,14 +31,14 @@ import type { HealthCheckResult } from '../types.ts'
  */
 export class MemoryHeapCheck extends BaseCheck {
   /**
-   * The warning threshold for heap memory usage in bytes
+   * The warning threshold percentage for heap memory usage
    */
-  #warnThreshold: number = stringHelpers.bytes.parse('250 mb')!
+  #warnThreshold: number = 75
 
   /**
-   * The failure threshold for heap memory usage in bytes
+   * The failure threshold percentage for heap memory usage
    */
-  #failThreshold: number = stringHelpers.bytes.parse('300 mb')!
+  #failThreshold: number = 80
 
   /**
    * Function to compute memory usage information
@@ -53,38 +53,28 @@ export class MemoryHeapCheck extends BaseCheck {
   name: string = 'Memory heap check'
 
   /**
-   * Define the heap threshold after which a warning
+   * Define the percentage threshold after which a warning
    * should be created.
    *
-   * - The value should be either a number in bytes
-   * - Or it should be a value expression in string.
+   * The value should be a number representing a percentage (0-100).
    *
-   * ```
-   * .warnWhenExceeds('200 mb')
-   * ```
-   *
-   * @param value The threshold value as bytes (number) or string expression
+   * @param valueInPercentage The percentage threshold for warnings
    */
-  warnWhenExceeds(value: string | number) {
-    this.#warnThreshold = stringHelpers.bytes.parse(value)!
+  warnWhenExceeds(valueInPercentage: number) {
+    this.#warnThreshold = valueInPercentage
     return this
   }
 
   /**
-   * Define the heap threshold after which an error
+   * Define the percentage threshold after which an error
    * should be created.
    *
-   * - The value should be either a number in bytes
-   * - Or it should be a value expression in string.
+   * The value should be a number representing a percentage (0-100).
    *
-   * ```
-   * .failWhenExceeds('500 mb')
-   * ```
-   *
-   * @param value The threshold value as bytes (number) or string expression
+   * @param valueInPercentage The percentage threshold for errors
    */
-  failWhenExceeds(value: string | number) {
-    this.#failThreshold = stringHelpers.bytes.parse(value)!
+  failWhenExceeds(valueInPercentage: number) {
+    this.#failThreshold = valueInPercentage
     return this
   }
 
@@ -114,23 +104,34 @@ export class MemoryHeapCheck extends BaseCheck {
    */
   async run(): Promise<HealthCheckResult> {
     const { heapUsed } = this.#computeFn()
+    const heapStatistics = v8.getHeapStatistics()
+    const maxHeapSize = heapStatistics.heap_size_limit
+
+    const usedPercentage = Math.floor((heapUsed / maxHeapSize) * 100)
+
     const metaData = {
-      memoryInBytes: {
-        used: heapUsed,
+      sizeInPercentage: {
+        used: usedPercentage,
         failureThreshold: this.#failThreshold,
         warningThreshold: this.#warnThreshold,
       },
+      heapInBytes: {
+        used: heapUsed,
+        maxHeapSize: maxHeapSize,
+        failureThreshold: Math.floor((this.#failThreshold / 100) * maxHeapSize),
+        warningThreshold: Math.floor((this.#warnThreshold / 100) * maxHeapSize),
+      },
     }
 
-    if (heapUsed > this.#failThreshold) {
+    if (usedPercentage >= this.#failThreshold) {
       return Result.failed(
-        `Heap usage is ${stringHelpers.bytes.format(heapUsed)}, which is above the threshold of ${stringHelpers.bytes.format(this.#failThreshold)}`
+        `Heap usage is ${usedPercentage}%, which is above the threshold of ${this.#failThreshold}%`
       ).mergeMetaData(metaData)
     }
 
-    if (heapUsed > this.#warnThreshold) {
+    if (usedPercentage >= this.#warnThreshold) {
       return Result.warning(
-        `Heap usage is ${stringHelpers.bytes.format(heapUsed)}, which is above the threshold of ${stringHelpers.bytes.format(this.#warnThreshold)}`
+        `Heap usage is ${usedPercentage}%, which is above the threshold of ${this.#warnThreshold}%`
       ).mergeMetaData(metaData)
     }
 
