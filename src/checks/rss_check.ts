@@ -7,22 +7,22 @@
  * file that was distributed with this source code.
  */
 
-import stringHelpers from '@poppinss/utils/string'
-
+import os from 'node:os'
 import { Result } from '../result.ts'
 import { BaseCheck } from '../base_check.ts'
 import type { HealthCheckResult } from '../types.ts'
 
 /**
  * Checks for the memory RSS size and report warning or error after a
- * certain threshold is exceeded.
+ * certain threshold is exceeded. Thresholds are defined as percentages
+ * of the total system memory.
  *
  * @example
  * ```typescript
  * const rssCheck = new MemoryRSSCheck()
  *   .as('RSS memory usage check')
- *   .warnWhenExceeds('300 mb')
- *   .failWhenExceeds('400 mb')
+ *   .warnWhenExceeds(70) // Warning at 70% of total system RAM
+ *   .failWhenExceeds(85) // Error at 85% of total system RAM
  *   .cacheFor('1 minute')
  *
  * const result = await rssCheck.run()
@@ -31,14 +31,14 @@ import type { HealthCheckResult } from '../types.ts'
  */
 export class MemoryRSSCheck extends BaseCheck {
   /**
-   * The warning threshold for RSS memory usage in bytes
+   * The warning threshold percentage for RSS memory usage
    */
-  #warnThreshold: number = stringHelpers.bytes.parse('320 mb')!
+  #warnThreshold: number = 75
 
   /**
-   * The failure threshold for RSS memory usage in bytes
+   * The failure threshold percentage for RSS memory usage
    */
-  #failThreshold: number = stringHelpers.bytes.parse('350 mb')!
+  #failThreshold: number = 80
 
   /**
    * Function to compute memory usage information
@@ -53,38 +53,28 @@ export class MemoryRSSCheck extends BaseCheck {
   name: string = 'Memory RSS check'
 
   /**
-   * Define the RSS threshold after which a warning
+   * Define the percentage threshold after which a warning
    * should be created.
    *
-   * - The value should be either a number in bytes
-   * - Or it should be a value expression in string.
+   * The value should be a number representing a percentage (0-100).
    *
-   * ```
-   * .warnWhenExceeds('200 mb')
-   * ```
-   *
-   * @param value The threshold value as bytes (number) or string expression
+   * @param valueInPercentage The percentage threshold for warnings
    */
-  warnWhenExceeds(value: string | number) {
-    this.#warnThreshold = stringHelpers.bytes.parse(value)!
+  warnWhenExceeds(valueInPercentage: number) {
+    this.#warnThreshold = valueInPercentage
     return this
   }
 
   /**
-   * Define the RSS threshold after which an error
+   * Define the percentage threshold after which an error
    * should be created.
    *
-   * - The value should be either a number in bytes
-   * - Or it should be a value expression in string.
+   * The value should be a number representing a percentage (0-100).
    *
-   * ```
-   * .failWhenExceeds('500 mb')
-   * ```
-   *
-   * @param value The threshold value as bytes (number) or string expression
+   * @param valueInPercentage The percentage threshold for errors
    */
-  failWhenExceeds(value: string | number) {
-    this.#failThreshold = stringHelpers.bytes.parse(value)!
+  failWhenExceeds(valueInPercentage: number) {
+    this.#failThreshold = valueInPercentage
     return this
   }
 
@@ -114,23 +104,33 @@ export class MemoryRSSCheck extends BaseCheck {
    */
   async run(): Promise<HealthCheckResult> {
     const { rss } = this.#computeFn()
+    const totalSystemMemory = os.totalmem()
+
+    const usedPercentage = Math.floor((rss / totalSystemMemory) * 100)
+
     const metaData = {
-      memoryInBytes: {
-        used: rss,
+      sizeInPercentage: {
+        used: usedPercentage,
         failureThreshold: this.#failThreshold,
         warningThreshold: this.#warnThreshold,
       },
+      memoryInBytes: {
+        used: rss,
+        totalSystemMemory: totalSystemMemory,
+        failureThreshold: Math.floor((this.#failThreshold / 100) * totalSystemMemory),
+        warningThreshold: Math.floor((this.#warnThreshold / 100) * totalSystemMemory),
+      },
     }
 
-    if (rss > this.#failThreshold) {
+    if (usedPercentage >= this.#failThreshold) {
       return Result.failed(
-        `RSS usage is ${stringHelpers.bytes.format(rss)}, which is above the threshold of ${stringHelpers.bytes.format(this.#failThreshold)}`
+        `RSS usage is ${usedPercentage}%, which is above the threshold of ${this.#failThreshold}%`
       ).mergeMetaData(metaData)
     }
 
-    if (rss > this.#warnThreshold) {
+    if (usedPercentage >= this.#warnThreshold) {
       return Result.warning(
-        `RSS usage is ${stringHelpers.bytes.format(rss)}, which is above the threshold of ${stringHelpers.bytes.format(this.#warnThreshold)}`
+        `RSS usage is ${usedPercentage}%, which is above the threshold of ${this.#warnThreshold}%`
       ).mergeMetaData(metaData)
     }
 
