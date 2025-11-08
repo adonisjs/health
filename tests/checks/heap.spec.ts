@@ -13,9 +13,9 @@ import { mock } from 'node:test'
 import { MemoryHeapCheck } from '../../src/checks/heap_check.ts'
 import stringHelpers from '@poppinss/utils/string'
 
-test.group('Memory Heap', (group) => {
-  const maximumHeapSize = stringHelpers.bytes.parse('250 MB') as number
+const maximumHeapSize = stringHelpers.bytes.parse('250 mb') as number
 
+test.group('Memory Heap - byte thresholds', (group) => {
   group.each.setup(() => {
     mock.method(v8, 'getHeapStatistics', () => {
       return {
@@ -38,7 +38,86 @@ test.group('Memory Heap', (group) => {
     }
   })
 
-  test('report error when heap usage exceeds the defined error threshold', async ({ expect }) => {
+  test('report error when heap usage exceeds the define error threshold', async ({ expect }) => {
+    const heapHealthCheck = new MemoryHeapCheck().failWhenExceeds('1mb')
+
+    expect(await heapHealthCheck.run()).toEqual({
+      status: 'error',
+      finishedAt: expect.any(Date),
+      message: expect.any(String),
+      meta: {
+        memoryInBytes: {
+          failureThreshold: 1048576,
+          warningThreshold: 262144000,
+          used: expect.any(Number),
+        },
+      },
+    })
+  })
+
+  test('report warning when heap usage exceeds the defined warning threshold', async ({
+    expect,
+  }) => {
+    const heapHealthCheck = new MemoryHeapCheck().warnWhenExceeds('1mb')
+
+    expect(await heapHealthCheck.run()).toEqual({
+      status: 'warning',
+      finishedAt: expect.any(Date),
+      message: expect.any(String),
+      meta: {
+        memoryInBytes: {
+          failureThreshold: 314572800,
+          warningThreshold: 1048576,
+          used: expect.any(Number),
+        },
+      },
+    })
+  })
+
+  test('prepare ok result when heap usage is under defined thresholds', async ({ expect }) => {
+    const heapHealthCheck = new MemoryHeapCheck()
+
+    expect(await heapHealthCheck.run()).toEqual({
+      status: 'ok',
+      finishedAt: expect.any(Date),
+      message: 'Heap usage is under defined thresholds',
+      meta: {
+        memoryInBytes: {
+          failureThreshold: 314572800,
+          warningThreshold: 262144000,
+          used: expect.any(Number),
+        },
+      },
+    })
+  })
+})
+
+test.group('Memory Heap - percentage threshold', (group) => {
+  group.each.setup(() => {
+    mock.method(v8, 'getHeapStatistics', () => {
+      return {
+        heap_size_limit: maximumHeapSize,
+        total_heap_size: 0,
+        total_heap_size_executable: 0,
+        total_physical_size: 0,
+        total_available_size: 0,
+        used_heap_size: 0,
+        malloced_memory: 0,
+        peak_malloced_memory: 0,
+        does_zap_garbage: 0,
+        number_of_native_context: 0,
+        number_of_detached_context: 0,
+      }
+    })
+
+    return () => {
+      mock.reset()
+    }
+  })
+
+  test('report error when heap usage exceeds the defined percentage error threshold', async ({
+    expect,
+  }) => {
     const errorPercentageThreshold = 90
     const warningPercentageThreshold = 75
     const heapUsedBytes = Math.floor((errorPercentageThreshold / 100) * maximumHeapSize) + 1
@@ -53,7 +132,9 @@ test.group('Memory Heap', (group) => {
       }
     })
 
-    const heapHealthCheck = new MemoryHeapCheck().failWhenExceeds(errorPercentageThreshold)
+    const heapHealthCheck = new MemoryHeapCheck()
+      .warnWhenExceedsPercentage(warningPercentageThreshold)
+      .failWhenExceedsPercentage(errorPercentageThreshold)
 
     const result = await heapHealthCheck.run()
     const usedPercentage = Math.floor((heapUsedBytes / maximumHeapSize) * 100)
@@ -78,7 +159,7 @@ test.group('Memory Heap', (group) => {
     })
   })
 
-  test('report warning when heap usage exceeds the defined warning threshold', async ({
+  test('report warning when heap usage exceeds the defined percentage warning threshold', async ({
     expect,
   }) => {
     const warningPercentageThreshold = 80
@@ -96,8 +177,8 @@ test.group('Memory Heap', (group) => {
     })
 
     const heapHealthCheck = new MemoryHeapCheck()
-      .warnWhenExceeds(warningPercentageThreshold)
-      .failWhenExceeds(errorPercentageThreshold)
+      .warnWhenExceedsPercentage(warningPercentageThreshold)
+      .failWhenExceedsPercentage(errorPercentageThreshold)
 
     const result = await heapHealthCheck.run()
     const usedPercentage = Math.floor((heapUsedBytes / maximumHeapSize) * 100)
@@ -122,7 +203,9 @@ test.group('Memory Heap', (group) => {
     })
   })
 
-  test('prepare ok result when heap usage is under defined thresholds', async ({ expect }) => {
+  test('prepare ok result when heap usage is under defined percentage thresholds', async ({
+    expect,
+  }) => {
     const warningPercentageThreshold = 75
     const errorPercentageThreshold = 80
     const heapUsedBytes = Math.floor((warningPercentageThreshold / 100) * maximumHeapSize) - 1
@@ -138,6 +221,8 @@ test.group('Memory Heap', (group) => {
     })
 
     const heapHealthCheck = new MemoryHeapCheck()
+      .warnWhenExceedsPercentage(warningPercentageThreshold)
+      .failWhenExceedsPercentage(errorPercentageThreshold)
 
     const result = await heapHealthCheck.run()
     const usedPercentage = Math.floor((heapUsedBytes / maximumHeapSize) * 100)
