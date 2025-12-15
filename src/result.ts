@@ -15,8 +15,6 @@ import type { HealthCheckResult } from './types.ts'
  *
  * @example
  * ```typescript
- * import { Result } from '@adonisjs/health'
- *
  * // Success result
  * const success = Result.ok('Database connection is healthy')
  *
@@ -35,7 +33,7 @@ export class Result implements HealthCheckResult {
   /**
    * Create result for success status
    *
-   * @param message The success message
+   * @param message - The success message
    *
    * @example
    * ```typescript
@@ -49,8 +47,8 @@ export class Result implements HealthCheckResult {
   /**
    * Create result for failed status
    *
-   * @param message The error message or Error object
-   * @param error Optional error object when message is a string
+   * @param message - The error message or Error object
+   * @param error - Optional error object when message is a string
    *
    * @example
    * ```typescript
@@ -82,7 +80,7 @@ export class Result implements HealthCheckResult {
   /**
    * Create result for warning status
    *
-   * @param message The warning message
+   * @param message - The warning message
    *
    * @example
    * ```typescript
@@ -101,9 +99,9 @@ export class Result implements HealthCheckResult {
   /**
    * Creates a new Result instance
    *
-   * @param message The result message
-   * @param status The result status
-   * @param finishedAt The timestamp when the check finished
+   * @param message - The result message
+   * @param status - The result status
+   * @param finishedAt - The timestamp when the check finished
    */
   constructor(
     public message: string,
@@ -114,7 +112,7 @@ export class Result implements HealthCheckResult {
   /**
    * Update the finished at timestamp for the result
    *
-   * @param finishedAt The new finish timestamp
+   * @param finishedAt - The new finish timestamp
    *
    * @example
    * ```typescript
@@ -131,7 +129,7 @@ export class Result implements HealthCheckResult {
    * Define custom meta-data for the result. Calling this method will
    * override the existing meta-data
    *
-   * @param metaData The metadata object to set
+   * @param metaData - The metadata object to set
    *
    * @example
    * ```typescript
@@ -148,7 +146,7 @@ export class Result implements HealthCheckResult {
    * Merge custom meta-data with the existing meta-data. A shallow
    * merge is performed
    *
-   * @param metaData The metadata object to merge
+   * @param metaData - The metadata object to merge
    *
    * @example
    * ```typescript

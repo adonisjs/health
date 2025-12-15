@@ -62,7 +62,12 @@ export class DiskSpaceCheck extends BaseCheck {
    * Define the percentage threshold after which a
    * warning should be created
    *
-   * @param valueInPercentage The percentage threshold for warnings
+   * @param valueInPercentage - The percentage threshold for warnings (0-100)
+   *
+   * @example
+   * ```typescript
+   * const diskCheck = new DiskSpaceCheck().warnWhenExceeds(70)
+   * ```
    */
   warnWhenExceeds(valueInPercentage: number) {
     this.#warnThreshold = valueInPercentage
@@ -73,7 +78,12 @@ export class DiskSpaceCheck extends BaseCheck {
    * Define the percentage threshold after which an
    * error should be created
    *
-   * @param valueInPercentage The percentage threshold for errors
+   * @param valueInPercentage - The percentage threshold for errors (0-100)
+   *
+   * @example
+   * ```typescript
+   * const diskCheck = new DiskSpaceCheck().failWhenExceeds(85)
+   * ```
    */
   failWhenExceeds(valueInPercentage: number) {
     this.#failThreshold = valueInPercentage
@@ -84,7 +94,7 @@ export class DiskSpaceCheck extends BaseCheck {
    * Define a custom callback to compute the disk space. Defaults to
    * using "check-disk-space" package
    *
-   * @param callback Function that returns disk space information
+   * @param callback - Function that returns disk space information
    *
    * @example
    * ```typescript

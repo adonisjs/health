@@ -44,7 +44,7 @@ export abstract class BaseCheck implements HealthCheckContract {
   /**
    * Define a custom unique name for the check
    *
-   * @param name The unique name for the health check
+   * @param name - The unique name for the health check
    *
    * @example
    * ```typescript
@@ -60,7 +60,7 @@ export abstract class BaseCheck implements HealthCheckContract {
    * Specify the duration for which the check should be
    * cached for
    *
-   * @param duration The cache duration as a string (e.g., '5s', '1m') or number in seconds
+   * @param duration - The cache duration as a string (e.g., '5s', '1m') or number in seconds
    *
    * @example
    * ```typescript
@@ -74,5 +74,9 @@ export abstract class BaseCheck implements HealthCheckContract {
     return this
   }
 
+  /**
+   * Execute the health check and return the result.
+   * Must be implemented by all health check classes.
+   */
   abstract run(): Promise<HealthCheckResult>
 }

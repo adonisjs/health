@@ -56,9 +56,6 @@ export type HealthCheckResult = {
  *
  * @example
  * ```typescript
- * import { HealthChecks } from '@adonisjs/health'
- * import { DiskSpaceCheck, MemoryHeapCheck } from '@adonisjs/health/checks'
- *
  * const healthChecks = new HealthChecks()
  * healthChecks.register([
  *   new DiskSpaceCheck().warnWhenExceeds(70).failWhenExceeds(85),
@@ -146,10 +143,6 @@ export type HealthCheckReport = {
  *
  * @example
  * ```typescript
- * import { BaseCheck } from '@adonisjs/health'
- * import { Result } from '@adonisjs/health'
- * import type { HealthCheckContract, HealthCheckResult } from '@adonisjs/health/types'
- *
  * class DatabaseCheck extends BaseCheck implements HealthCheckContract {
  *   name = 'Database connection check'
  *   cacheDuration = 60 // Cache for 60 seconds
@@ -190,8 +183,24 @@ export interface HealthCheckContract {
 }
 
 /**
- * Tracing data shared with the health check channel subscribers
+ * Tracing data shared with the health check channel subscribers.
+ * This data is passed to diagnostic channel listeners when health checks are executed.
+ *
+ * @example
+ * ```typescript
+ * healthCheck.subscribe({
+ *   start(data: HealthCheckTracingData) {
+ *     console.log(`Starting check: ${data.check.name}`)
+ *   },
+ *   end(data: HealthCheckTracingData) {
+ *     console.log(`Finished check: ${data.check.name}`)
+ *   }
+ * })
+ * ```
  */
 export type HealthCheckTracingData = {
+  /**
+   * The health check instance being executed
+   */
   check: HealthCheckContract
 }

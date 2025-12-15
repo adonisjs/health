@@ -60,7 +60,7 @@ export class HealthChecks {
   /**
    * Executes the check and respects the caching layer as well
    *
-   * @param check The health check to execute
+   * @param check - The health check to execute
    */
   async #runCheck(
     check: HealthCheckContract
@@ -119,7 +119,7 @@ export class HealthChecks {
    * Register health checks. Existing health checks will be
    * removed during the register method call
    *
-   * @param checks Array of health checks to register
+   * @param checks - Array of health checks to register
    *
    * @example
    * ```typescript
@@ -138,7 +138,7 @@ export class HealthChecks {
   /**
    * Append new set of health checks
    *
-   * @param checks Array of health checks to append
+   * @param checks - Array of health checks to append
    *
    * @example
    * ```typescript

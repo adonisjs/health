@@ -83,14 +83,16 @@ export class MemoryHeapCheck extends BaseCheck {
    * Define the heap threshold after which a warning
    * should be created. This method sets a byte-based threshold.
    *
-   * - The value should be either a number in bytes
-   * - Or it should be a value expression in string.
+   * The value should be either a number in bytes or a value expression string.
    *
-   * ```
-   * .warnWhenExceeds('200 mb')
-   * ```
+   * @param value - The threshold value as bytes (number) or string expression (e.g., '200 mb')
    *
-   * @param value The threshold value as bytes (number) or string expression
+   * @example
+   * ```typescript
+   * const check = new MemoryHeapCheck().warnWhenExceeds('200 mb')
+   * // or
+   * const check2 = new MemoryHeapCheck().warnWhenExceeds(209715200) // 200 MB in bytes
+   * ```
    */
   warnWhenExceeds(value: string | number) {
     const parsedValue = stringHelpers.bytes.parse(value)
@@ -106,14 +108,16 @@ export class MemoryHeapCheck extends BaseCheck {
    * Define the heap threshold after which an error
    * should be created. This method sets a byte-based threshold.
    *
-   * - The value should be either a number in bytes
-   * - Or it should be a value expression in string.
+   * The value should be either a number in bytes or a value expression string.
    *
-   * ```
-   * .failWhenExceeds('500 mb')
-   * ```
+   * @param value - The threshold value as bytes (number) or string expression (e.g., '500 mb')
    *
-   * @param value The threshold value as bytes (number) or string expression
+   * @example
+   * ```typescript
+   * const check = new MemoryHeapCheck().failWhenExceeds('500 mb')
+   * // or
+   * const check2 = new MemoryHeapCheck().failWhenExceeds(524288000) // 500 MB in bytes
+   * ```
    */
   failWhenExceeds(value: string | number) {
     const parsedValue = stringHelpers.bytes.parse(value)
@@ -127,11 +131,15 @@ export class MemoryHeapCheck extends BaseCheck {
 
   /**
    * Define the percentage threshold after which a warning
-   * should be created. This method sets a percentage-based threshold.
+   * should be created. This method sets a percentage-based threshold
+   * relative to the V8 heap size limit.
    *
-   * The value should be a number representing a percentage (0-100).
+   * @param valueInPercentage - The percentage threshold for warnings (0-100)
    *
-   * @param valueInPercentage The percentage threshold for warnings
+   * @example
+   * ```typescript
+   * const check = new MemoryHeapCheck().warnWhenExceedsPercentage(80)
+   * ```
    */
   warnWhenExceedsPercentage(valueInPercentage: number) {
     if (valueInPercentage < 0 || valueInPercentage > 100) {
@@ -144,11 +152,15 @@ export class MemoryHeapCheck extends BaseCheck {
 
   /**
    * Define the percentage threshold after which an error
-   * should be created. This method sets a percentage-based threshold.
+   * should be created. This method sets a percentage-based threshold
+   * relative to the V8 heap size limit.
    *
-   * The value should be a number representing a percentage (0-100).
+   * @param valueInPercentage - The percentage threshold for errors (0-100)
    *
-   * @param valueInPercentage The percentage threshold for errors
+   * @example
+   * ```typescript
+   * const check = new MemoryHeapCheck().failWhenExceedsPercentage(90)
+   * ```
    */
   failWhenExceedsPercentage(valueInPercentage: number) {
     if (valueInPercentage < 0 || valueInPercentage > 100) {
@@ -163,7 +175,7 @@ export class MemoryHeapCheck extends BaseCheck {
    * Define a custom callback to compute the heap size. Defaults to
    * using "process.memoryUsage()" method call
    *
-   * @param callback Function that returns memory usage information
+   * @param callback - Function that returns memory usage information
    *
    * @example
    * ```typescript
