@@ -10,8 +10,7 @@
 import type { HealthCheckResult } from './types.ts'
 
 /**
- * The result class offers a chainable API to create
- * HealthCheckResult
+ * The Result class offers a chainable API to create health check results
  *
  * @example
  * ```typescript
@@ -31,7 +30,7 @@ import type { HealthCheckResult } from './types.ts'
  */
 export class Result implements HealthCheckResult {
   /**
-   * Create result for success status
+   * Creates a result with success status
    *
    * @param message - The success message
    *
@@ -45,7 +44,7 @@ export class Result implements HealthCheckResult {
   }
 
   /**
-   * Create result for failed status
+   * Creates a result with failed status
    *
    * @param message - The error message or Error object
    * @param error - Optional error object when message is a string
@@ -78,7 +77,7 @@ export class Result implements HealthCheckResult {
   }
 
   /**
-   * Create result for warning status
+   * Creates a result with warning status
    *
    * @param message - The warning message
    *
@@ -110,7 +109,7 @@ export class Result implements HealthCheckResult {
   ) {}
 
   /**
-   * Update the finished at timestamp for the result
+   * Updates the finished at timestamp for the result
    *
    * @param finishedAt - The new finish timestamp
    *
@@ -126,8 +125,8 @@ export class Result implements HealthCheckResult {
   }
 
   /**
-   * Define custom meta-data for the result. Calling this method will
-   * override the existing meta-data
+   * Defines custom meta-data for the result. Calling this method will
+   * override any existing meta-data
    *
    * @param metaData - The metadata object to set
    *
@@ -143,7 +142,7 @@ export class Result implements HealthCheckResult {
   }
 
   /**
-   * Merge custom meta-data with the existing meta-data. A shallow
+   * Merges custom meta-data with the existing meta-data. A shallow
    * merge is performed
    *
    * @param metaData - The metadata object to merge
@@ -162,7 +161,7 @@ export class Result implements HealthCheckResult {
   }
 
   /**
-   * Convert the result to a plain object
+   * Converts the result to a plain object
    *
    * @example
    * ```typescript

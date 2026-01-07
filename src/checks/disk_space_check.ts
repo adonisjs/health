@@ -14,8 +14,8 @@ import { BaseCheck } from '../base_check.ts'
 import type { HealthCheckResult } from '../types.ts'
 
 /**
- * Checks for the disk space and report warning or error after a
- * certain threshold is exceeded.
+ * Checks the disk space and reports warning or error after a
+ * certain threshold is exceeded
  *
  * @example
  * ```typescript
@@ -59,7 +59,7 @@ export class DiskSpaceCheck extends BaseCheck {
   diskPath = process.platform === 'win32' ? 'C:\\' : '/'
 
   /**
-   * Define the percentage threshold after which a
+   * Defines the percentage threshold after which a
    * warning should be created
    *
    * @param valueInPercentage - The percentage threshold for warnings (0-100)
@@ -75,7 +75,7 @@ export class DiskSpaceCheck extends BaseCheck {
   }
 
   /**
-   * Define the percentage threshold after which an
+   * Defines the percentage threshold after which an
    * error should be created
    *
    * @param valueInPercentage - The percentage threshold for errors (0-100)
@@ -91,8 +91,8 @@ export class DiskSpaceCheck extends BaseCheck {
   }
 
   /**
-   * Define a custom callback to compute the disk space. Defaults to
-   * using "check-disk-space" package
+   * Defines a custom callback to compute the disk space. Defaults to
+   * using the "check-disk-space" package
    *
    * @param callback - Function that returns disk space information
    *

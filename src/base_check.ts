@@ -11,8 +11,7 @@ import stringHelpers from '@poppinss/utils/string'
 import type { HealthCheckContract, HealthCheckResult } from './types.ts'
 
 /**
- * BaseCheck with shared affordances to define a custom health
- * check
+ * Base class with shared affordances to define a custom health check
  *
  * @example
  * ```typescript
@@ -57,8 +56,7 @@ export abstract class BaseCheck implements HealthCheckContract {
   }
 
   /**
-   * Specify the duration for which the check should be
-   * cached for
+   * Specify the duration for which the check results should be cached
    *
    * @param duration - The cache duration as a string (e.g., '5s', '1m') or number in seconds
    *
@@ -75,8 +73,8 @@ export abstract class BaseCheck implements HealthCheckContract {
   }
 
   /**
-   * Execute the health check and return the result.
-   * Must be implemented by all health check classes.
+   * Executes the health check and returns the result.
+   * Must be implemented by all health check classes
    */
   abstract run(): Promise<HealthCheckResult>
 }

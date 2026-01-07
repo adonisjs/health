@@ -12,8 +12,6 @@
  *
  * @example
  * ```typescript
- * import { Result } from '@adonisjs/health'
- *
  * // Success result
  * const result: HealthCheckResult = {
  *   message: 'Database connection is healthy',
@@ -35,7 +33,7 @@ export type HealthCheckResult = {
   message: string
 
   /**
-   * The status of the check.
+   * The status of the check
    */
   status: 'ok' | 'warning' | 'error'
 
@@ -45,7 +43,7 @@ export type HealthCheckResult = {
   finishedAt: Date
 
   /**
-   * An meta-data associated with the check
+   * Optional meta-data associated with the check
    */
   meta?: Record<string, any>
 }
@@ -80,14 +78,13 @@ export type HealthCheckResult = {
  */
 export type HealthCheckReport = {
   /**
-   * Is the entire report healthy. The value will be set to
-   * false when one or more of the checks has a status or
-   * "error"
+   * Indicates whether the entire report is healthy. The value will be set to
+   * false when one or more of the checks has a status of "error"
    */
   isHealthy: boolean
 
   /**
-   * Status of the entire report.
+   * Status of the entire report
    *
    * - Set to "ok" when all checks have ok status
    * - Set to "warning" when one or more checks have warning status
@@ -101,7 +98,7 @@ export type HealthCheckReport = {
   finishedAt: Date
 
   /**
-   * The debugging info for the running process
+   * The debugging information for the running process
    */
   debugInfo: {
     /**
@@ -132,7 +129,7 @@ export type HealthCheckReport = {
   }
 
   /**
-   * Perform checks and their report
+   * Performed checks and their results
    */
   checks: ({ isCached: boolean; name: string } & HealthCheckResult)[]
 }

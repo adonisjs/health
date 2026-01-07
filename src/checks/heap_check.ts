@@ -15,9 +15,9 @@ import { BaseCheck } from '../base_check.ts'
 import type { HealthCheckResult } from '../types.ts'
 
 /**
- * Checks for the memory heap size and report warning or error after a
+ * Checks the memory heap size and reports warning or error after a
  * certain threshold is exceeded. Thresholds can be defined as absolute
- * byte values or as percentages of the maximum V8 heap size limit.
+ * byte values or as percentages of the maximum V8 heap size limit
  *
  * @example
  * ```typescript
@@ -80,10 +80,10 @@ export class MemoryHeapCheck extends BaseCheck {
   name: string = 'Memory heap check'
 
   /**
-   * Define the heap threshold after which a warning
-   * should be created. This method sets a byte-based threshold.
+   * Defines the heap threshold after which a warning
+   * should be created. This method sets a byte-based threshold
    *
-   * The value should be either a number in bytes or a value expression string.
+   * The value should be either a number in bytes or a value expression string
    *
    * @param value - The threshold value as bytes (number) or string expression (e.g., '200 mb')
    *
@@ -105,10 +105,10 @@ export class MemoryHeapCheck extends BaseCheck {
   }
 
   /**
-   * Define the heap threshold after which an error
-   * should be created. This method sets a byte-based threshold.
+   * Defines the heap threshold after which an error
+   * should be created. This method sets a byte-based threshold
    *
-   * The value should be either a number in bytes or a value expression string.
+   * The value should be either a number in bytes or a value expression string
    *
    * @param value - The threshold value as bytes (number) or string expression (e.g., '500 mb')
    *
@@ -130,9 +130,9 @@ export class MemoryHeapCheck extends BaseCheck {
   }
 
   /**
-   * Define the percentage threshold after which a warning
+   * Defines the percentage threshold after which a warning
    * should be created. This method sets a percentage-based threshold
-   * relative to the V8 heap size limit.
+   * relative to the V8 heap size limit
    *
    * @param valueInPercentage - The percentage threshold for warnings (0-100)
    *
@@ -151,9 +151,9 @@ export class MemoryHeapCheck extends BaseCheck {
   }
 
   /**
-   * Define the percentage threshold after which an error
+   * Defines the percentage threshold after which an error
    * should be created. This method sets a percentage-based threshold
-   * relative to the V8 heap size limit.
+   * relative to the V8 heap size limit
    *
    * @param valueInPercentage - The percentage threshold for errors (0-100)
    *
@@ -172,8 +172,8 @@ export class MemoryHeapCheck extends BaseCheck {
   }
 
   /**
-   * Define a custom callback to compute the heap size. Defaults to
-   * using "process.memoryUsage()" method call
+   * Defines a custom callback to compute the heap size. Defaults to
+   * using the "process.memoryUsage()" method call
    *
    * @param callback - Function that returns memory usage information
    *

@@ -16,8 +16,8 @@ import {
 } from './types.ts'
 
 /**
- * The HealthChecks acts as a repository and a runner to register/execute
- * health checks.
+ * The HealthChecks class acts as a repository and a runner to register and execute
+ * health checks
  *
  * @example
  * ```typescript
@@ -45,7 +45,8 @@ export class HealthChecks {
   #cachedResults: Map<string, HealthCheckResult> = new Map()
 
   /**
-   * Returns the debugging info of the process
+   * Returns the debugging information for the current process.
+   * Includes process ID, parent process ID, platform, uptime, and Node.js version.
    */
   #getDebugInfo(): HealthCheckReport['debugInfo'] {
     return {
@@ -58,7 +59,9 @@ export class HealthChecks {
   }
 
   /**
-   * Executes the check and respects the caching layer as well
+   * Executes a single health check and respects the caching layer.
+   * Returns cached results if they are still fresh, otherwise executes
+   * the check and caches the result if caching is enabled.
    *
    * @param check - The health check to execute
    */
@@ -116,7 +119,7 @@ export class HealthChecks {
   }
 
   /**
-   * Register health checks. Existing health checks will be
+   * Registers health checks. Any existing health checks will be
    * removed during the register method call
    *
    * @param checks - Array of health checks to register
@@ -136,7 +139,7 @@ export class HealthChecks {
   }
 
   /**
-   * Append new set of health checks
+   * Appends a new set of health checks to the existing ones
    *
    * @param checks - Array of health checks to append
    *

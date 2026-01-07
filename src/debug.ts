@@ -11,7 +11,7 @@ import { debuglog } from 'node:util'
 
 /**
  * Debug logger for the health module.
- * Enable by setting NODE_DEBUG=adonisjs:health environment variable.
+ * Enable by setting the NODE_DEBUG=adonisjs:health environment variable
  *
  * @example
  * ```typescript

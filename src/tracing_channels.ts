@@ -12,7 +12,7 @@ import { type HealthCheckTracingData } from './types.ts'
 
 /**
  * Diagnostic tracing channel for health check execution.
- * Subscribe to this channel to monitor health check lifecycle events.
+ * Subscribe to this channel to monitor health check lifecycle events
  *
  * @example
  * ```typescript
