@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import checkDiskSpace from 'check-disk-space'
+import { checkDiskSpace } from 'check-disk-space'
 
 import { Result } from '../result.ts'
 import { BaseCheck } from '../base_check.ts'
@@ -44,7 +44,6 @@ export class DiskSpaceCheck extends BaseCheck {
    * Function to compute disk space information
    */
   #computeFn: () => Promise<{ free: number; size: number }> = () => {
-    // @ts-expect-error "Broken typings"
     return checkDiskSpace(this.diskPath)
   }
 
