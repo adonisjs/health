@@ -29,7 +29,5 @@ import { type HealthCheckTracingData } from './types.ts'
  * })
  * ```
  */
-export const healthCheck = diagnostics_channel.tracingChannel<
-  'adonisjs.health.check',
-  HealthCheckTracingData
->('adonisjs.health.check')
+export const healthCheck =
+  diagnostics_channel.tracingChannel<HealthCheckTracingData>('adonisjs.health.check')
